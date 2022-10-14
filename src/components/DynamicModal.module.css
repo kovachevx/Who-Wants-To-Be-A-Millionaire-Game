@@ -1,0 +1,24 @@
+.barContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bodyContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.percentage {
+    margin: 30px;
+}
+
+.exitFooter {
+    display: flex;
+    justify-content: space-between !important;
+}
+
+.entireModal {
+    background-color: darkblue !important;
+}

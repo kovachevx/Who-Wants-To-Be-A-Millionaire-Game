@@ -1,0 +1,54 @@
+.questionContainer {
+    border: 2px solid orange;
+    background-color: rgba(0, 0, 139, 0.95);
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    text-align: center;
+    color: white;
+}
+
+.QAContainer {
+    margin-top: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.answersContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 1250px;
+}
+
+.answer {
+    border: 1px solid orange !important;
+    background-color: darkblue !important;
+    width: 485px;
+    margin: 10px;
+    height: 38px;
+}
+
+.answerLetter {
+    text-align: left;
+}
+
+.letterRef {
+    font-weight: bolder;
+    color: white;
+}
+
+.danger {
+    background-color: rgb(220,53,69) !important;
+}
+
+.success {
+    background-color: rgb(25,135,84) !important;
+}
+
+.warning {
+        background-color: orange !important;
+}

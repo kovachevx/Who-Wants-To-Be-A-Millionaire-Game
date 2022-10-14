@@ -1,0 +1,12 @@
+.bar {
+    max-width: 500px;
+    max-height: 100px;
+    display: flex;
+    transform: rotate(-90deg);
+    margin-top: 50px;
+}
+
+.barContainer {
+    width: 100px;
+    height: 100px;
+}
