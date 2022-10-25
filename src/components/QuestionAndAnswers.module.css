@@ -21,34 +21,59 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    width: 1250px;
+    max-width: 1250px;
+    width: 100%;
 }
 
 .answer {
     border: 1px solid orange !important;
-    background-color: darkblue !important;
+    background-color: rgba(0, 0, 139, 0.868) !important;
     width: 485px;
     margin: 10px;
     height: 38px;
-}
-
-.answerLetter {
-    text-align: left;
+    text-align: left !important;
 }
 
 .letterRef {
     font-weight: bolder;
-    color: white;
+    color: orange;
+}
+
+.selectedLetterRef {
+    font-weight: bolder;
+    color: black;
 }
 
 .danger {
-    background-color: rgb(220,53,69) !important;
+    background-color: rgb(220, 53, 69) !important;
 }
 
 .success {
-    background-color: rgb(25,135,84) !important;
+    background-color: rgb(25, 135, 84) !important;
 }
 
 .warning {
-        background-color: orange !important;
+    background-color: orange !important;
+}
+
+@media only screen and (max-width: 1213px) {
+    .answer {
+        width: 45%;
+    }
+
+    .answerText {
+        word-wrap: break-word;
+    }
+
+    .QAContainer {
+        margin-top: 30%;
+        font-size: medium;
+    }
+}
+
+@media only screen and (max-width: 1050px) {
+    .answerText {
+        font-size: 1.4vw;
+        word-wrap: break-word;
+    }
 }

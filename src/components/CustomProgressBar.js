@@ -6,7 +6,7 @@ const CustomProgressBar = props => {
         <div className={classes.barContainer}>
                 <Progress className={classes.bar} value={props.value} />
         </div>
-    )
+    );
 };
 
 export default CustomProgressBar;

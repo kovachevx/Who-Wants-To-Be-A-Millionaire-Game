@@ -5,7 +5,6 @@ const dummyElement = document.createElement('span');
 const populateQuestions = (questionData) => {
   const transformedData = transformData(questionData);
   transformedData.forEach((question) => questions.push(question));
-  console.log(questions);
 };
 
 const transformData = (data) => {

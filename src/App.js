@@ -1,28 +1,22 @@
 import classes from './App.module.css';
 import { Fragment, useEffect, useState } from 'react';
-import { questions as quiz, quotes, modalData, sumStairway } from './util/variables';
+import { questions as quiz, quotes, modalData, sumStairway, music } from './util/variables';
 import fetchQuestionsByDifficulty from './api/fetchQuestions';
 import QuestionAndAnswers from './components/QuestionAndAnswers';
 import SumStairway from './components/SumStairway';
 import DynamicModal from './components/DynamicModal';
 import Hints from './components/Hints';
 import Intro from './components/Intro';
-import ThemeSound from './components/ThemeSound';
-import SoundEffect from './components/SoundEffect';
-import SoundFrom100To1000 from "./sounds/soundQuestionFrom100To1000.mp3";
-import SoundFrom1000To50000 from "./sounds/soundQuestionFrom1000To50000.mp3";
-import Sound50000 from "./sounds/soundQuestion50000.mp3";
-import Sound100000 from "./sounds/soundQuestion100000.mp3";
-import MainTheme from "./sounds/main-theme.mp3"
-import WrongAnswerSound from "./sounds/wrong-answer.mp3";
+import Music from 'react-howler';
+import { Howl } from 'howler';
 
 function App() {
   const [gameHasStarted, setGameHasStarted] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [sumProps, setSumProps] = useState({ currentSumIndex: 0, certainSum: 0 });
   const [modalProps, setModalProps] = useState({});
-  const [theme, setTheme] = useState();
-  const [soundEffect, setSoundEffect] = useState();
+  const [theme, setTheme] = useState(music.SoundFrom100To1000);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   const startGameHandler = () => setGameHasStarted(true);
 
@@ -60,35 +54,50 @@ function App() {
 
   const buttonColorChangeHandler = (markedAnswer, newColor) => {
     questions[0].answers.forEach(answer => {
-      if (answer.answerText === markedAnswer) {
-        answer.color = newColor;
-      }
+      if (answer.answerText === markedAnswer) answer.color = newColor;
+      setTimeout(() => {
+        if (answer.answerText === questions[0].correct_answer) answer.color = 'success';
+      }, 1000);
       answer.disabled = true;
-      setQuestions(previousState => [...previousState]);
     });
+    setQuestions(previousState => [...previousState]);
   }
 
   useEffect(() => {
     if (sumProps.currentSumIndex === 0) {
-      setTheme(SoundFrom100To1000);
+      setTheme(music.SoundFrom100To1000);
     } else if (sumProps.currentSumIndex === 5) {
-      setTheme(SoundFrom1000To50000);
+      setTheme(music.SoundFrom1000To50000);
     } else if (sumProps.currentSumIndex === 13) {
-      setTheme(Sound50000);
+      setTheme(music.Sound50000);
     } else if (sumProps.currentSumIndex === 14) {
-      setTheme(Sound100000);
+      setTheme(music.Sound100000);
     } else if (sumProps.currentSumIndex === 15) {
-      setTheme(MainTheme);
+      setTheme(music.MainTheme);
     }
-  }, [sumProps.currentSumIndex])
+  }, [sumProps.currentSumIndex]);
+
+  const playSoundEffect = (src) => {
+    const sound = new Howl({
+      src,
+      html5: true,
+      volume: 0.5
+    });
+    sound.play();
+  }
 
   const checkAnswerHandler = (event) => {
-    const markedAnswer = event.target.textContent.slice(3);
+    let markedAnswer;
+    if (event.target.localName === 'span') markedAnswer = event.target.parentElement.firstChild.nextSibling.textContent;
+    else markedAnswer = event.target.textContent.slice(3);
+
     buttonColorChangeHandler(markedAnswer, 'warning');
 
     setTimeout(() => {
       if (markedAnswer === questions[0].correct_answer) {
         buttonColorChangeHandler(markedAnswer, 'success');
+        playSoundEffect(music.CorrectAnswerSound);
+
         setSumProps(previousState => {
           sumProps.currentSumIndex++;
           return { ...previousState }
@@ -107,7 +116,8 @@ function App() {
 
         nextQuestionHandler();
       } else {
-        setSoundEffect(WrongAnswerSound);
+        setIsPlaying(false);
+        playSoundEffect(music.WrongAnswerSound);
         buttonColorChangeHandler(markedAnswer, 'danger');
         setModalProps({ ...modalData.gameOver, body: `You are leaving with $${sumProps.certainSum}!`, action: refreshPage });
       }
@@ -134,7 +144,9 @@ function App() {
   }
 
   const audienceHandler = (event) => {
-    event.target.disabled = true;
+    if (event.target.localName === 'button') event.target.disabled = true;
+    else event.target.parentElement.disabled = true;
+
     const currentQuestion = questions[0];
     const presentIndices = currentQuestion.answers.map((answer, index) => answer.answerText !== "" ? index : null).filter(i => i !== null);
 
@@ -147,7 +159,9 @@ function App() {
   }
 
   const callAFriendHandler = (event) => {
-    event.target.disabled = true;
+    if (event.target.localName === 'button') event.target.disabled = true;
+    else event.target.parentElement.disabled = true;
+
     const currentQuestion = questions[0];
 
     const odds = Math.random();
@@ -172,14 +186,13 @@ function App() {
       {!gameHasStarted && <Intro startGame={startGameHandler} />}
       {gameHasStarted &&
         <Fragment>
-          <div>
+          <div className="mg col-10">
             <Hints onFiftyFifty={fiftyFiftyHandler} onAskTheAudience={audienceHandler} onCallAFriend={callAFriendHandler} questionData={questions} />
             < QuestionAndAnswers onCheck={checkAnswerHandler} questionData={questions[0]} />
           </div>
           <SumStairway onExit={exitGameHandler} questionIndex={sumProps.currentSumIndex} certainSum={sumProps.certainSum} />
           <DynamicModal isOpen={modalProps.modalIsOpen} toggleModal={toggleModalHandler} modalProps={modalProps} />
-          <ThemeSound theme={theme} />
-          <SoundEffect effect={soundEffect} />
+          <Music loop={true} src={theme} playing={isPlaying} volume={0.4} />
         </Fragment>}
     </div>
   );

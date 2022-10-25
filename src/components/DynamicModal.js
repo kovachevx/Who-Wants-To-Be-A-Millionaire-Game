@@ -11,7 +11,7 @@ const DynamicModal = props => {
                 {!Array.isArray(props.modalProps.body) && <div>{props.modalProps.body}</div>}
                 {Array.isArray(props.modalProps.body) && props.modalProps.body.map((element, index) => {
                     return (
-                        <div className={classes.barContainer}>
+                        <div key={index} className={classes.barContainer}>
                             <CustomProgressBar value={element} />
                             <div className={classes.percentage}>
                                 {`${answerToLetterRef[index]}: ${element}%`}
@@ -21,10 +21,19 @@ const DynamicModal = props => {
                 })}
             </ModalBody>
             <ModalFooter className={`${props.modalProps.resumeButtonText ? classes.exitFooter : ''}`}>
-                <Button color="primary" onClick={props.modalProps.action}>{props.modalProps.buttonText}</Button>
+                <Button
+                    color={props.modalProps.resumeButtonText ? 'danger' : 'primary'}
+                    onClick={props.modalProps.action}
+                >
+                    {props.modalProps.buttonText}
+                </Button>
                 {props.modalProps.resumeButtonText &&
-                    <Button onClick={props.modalProps.onResumeGame} color={props.modalProps.resumeColor}>{props.modalProps.resumeButtonText}</Button>
-                }
+                    <Button
+                        onClick={props.modalProps.onResumeGame}
+                        color={props.modalProps.resumeColor}
+                    >
+                        {props.modalProps.resumeButtonText}
+                    </Button>}
             </ModalFooter>
         </Modal>
     );

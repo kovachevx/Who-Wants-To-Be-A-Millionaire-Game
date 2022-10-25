@@ -3,6 +3,9 @@ import { sumStairway } from "../util/variables";
 import { Button } from 'reactstrap';
 
 const SumStairway = props => {
+
+
+    
     return (
         <div className={classes.sumContainer}>
             <ul>

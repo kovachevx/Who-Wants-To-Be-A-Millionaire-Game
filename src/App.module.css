@@ -1,5 +1,5 @@
 .mainContainer {
   display: flex;
-  background-image: url("./util/background2.png");
+  background-image: url("./util/images/background2.png");
   max-width: 1560px;
 }
